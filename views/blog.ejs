@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Happy+Monkey&family=Source+Serif+Pro&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="../css/blog.css" />
+    <link rel="icon" href="../images/logo.png" />
+    <title>Blog</title>
+  </head>
+  <body>
+    <header>
+      <!-- Menu -->
+      <!-- Button trigger modal -->
+      <button type="button" class="btn btn1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Menu
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="staticBackdropLabel">Blog</h4>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <a href="/home">Home</a>
+              <a href="/conditions">Conditions</a>
+              <a href="/contact">Contact</a>
+              <a href="/blog">Blog</a>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn2" data-bs-dismiss="modal">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main>
+      <!-- Logo -->
+      <img class="logo" src="../images/logo.png" alt="Logo" />
+
+      <!-- Siret -->
+      <p class="siret">SIRET 51525284900028</p>
+
+      <!-- Blog -->
+      <h1>
+        <img class="feuille" src="/images/feuille4.png" alt="feuille" />
+        Blog
+        <img class="feuille" src="/images/feuille2.png" alt="feuille" />
+      </h1>
+
+      <section class="articles"></section>
+    </main>
+    <script>
+      // Fonction pour récupérer et afficher tous les articles
+      function getAllArticles() {
+        fetch("/article/all")
+          .then((response) => response.json())
+          .then((articles) => {
+            console.log("articles:", articles);
+            // Check if articles is an array
+            if (Array.isArray(articles)) {
+              // Effacer les articles existants
+              document.querySelector(".articles").innerHTML = "";
+
+              // Parcourir les articles et créer des éléments HTML pour les afficher
+              articles.forEach((article) => {
+                const articleElement = document.createElement("div");
+                articleElement.classList.add("article");
+
+                const leftElement = document.createElement("div");
+                leftElement.classList.add("left");
+                const imageElement = document.createElement("img");
+                imageElement.src = article.image;
+                leftElement.appendChild(imageElement);
+
+                const rightElement = document.createElement("div");
+                rightElement.classList.add("right");
+                const dateElement = document.createElement("p");
+                dateElement.classList.add("date");
+                const formattedDate = new Date(
+                  article.date
+                ).toLocaleDateString();
+                dateElement.textContent = formattedDate;
+                rightElement.appendChild(dateElement);
+
+                const titleElement = document.createElement("h2");
+                const linkElement = document.createElement("a");
+                linkElement.textContent = article.titre;
+                titleElement.appendChild(linkElement);
+                rightElement.appendChild(titleElement);
+
+                const descriptionElement = document.createElement("p");
+                descriptionElement.classList.add("description");
+                descriptionElement.textContent = article.description;
+                rightElement.appendChild(descriptionElement);
+
+                const authorElement = document.createElement("p");
+                authorElement.classList.add("auteur");
+                authorElement.textContent = article.auteur;
+                rightElement.appendChild(authorElement);
+
+                articleElement.appendChild(leftElement);
+                articleElement.appendChild(rightElement);
+
+                document.querySelector(".articles").appendChild(articleElement);
+              });
+            } else {
+              console.error("Erreur: articles is not an array");
+            }
+          })
+          .catch((error) => {
+            console.error("Erreur:", error);
+          });
+      }
+
+      // Appeler la fonction pour récupérer et afficher tous les articles
+      getAllArticles();
+    </script>
+    <footer>
+      <p class="mention">
+        <a class="mention" href="/mentions">Mentions légales</a>
+      </p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+  </body>
+</html>
