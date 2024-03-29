@@ -5,16 +5,8 @@
     <meta name="viewport" content;;="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com%22%3E/" />
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Happy+Monkey&family=Source+Serif+Pro&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Happy+Monkey&family=Source+Serif+Pro&display=swap" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous"/>
     <link rel="stylesheet" href="../css/mentions.css" />
     <link rel="icon" href="../images/logo.png" />
     <title>Mentions légales</title>
@@ -23,35 +15,17 @@
     <header>
       <!-- Menu -->
       <!-- Button trigger modal -->
-      <button
-        type="button"
-        class="btn btn1"
-        data-bs-toggle="modal"
-        data-bs-target="#staticBackdrop"
-      >
+      <button type="button" class="btn btn1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Menu
       </button>
 
       <!-- Modal -->
-      <div
-        class="modal fade"
-        id="staticBackdrop"
-        data-bs-backdrop="static"
-        data-bs-keyboard="false"
-        tabindex="-1"
-        aria-labelledby="staticBackdropLabel"
-        aria-hidden="true"
-      >
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title" id="staticBackdropLabel">Menu</h4>
-              <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <a href="/home">Home</a>
@@ -69,12 +43,6 @@
       </div>
 
       <!-- Login -->
-      <!-- <button type="button" class="btn btn3" onclick="">
-        <a href="/login"
-          ><img class="login" src="../images/login.png" alt="login"
-        /></a>
-      </button> -->
-
       <% if(!jwtCookieExists){ %>
       <button type="button" class="btn btn3" onclick="window.location.href='/login'" id="loginButton">
         <a href="/login"><img class="login" src="../images/login.png" alt="login"/></a>
@@ -83,6 +51,9 @@
       <!-- Logout -->
       <button type="button" class="btn btn3" onclick="window.location.href='/logout'" id="logoutButton">
         <img class="logout" src="../images/logout.png" alt="logout"/>
+      </button>
+      <button type="button" class="btn btn3" onclick="window.location.href='/liste'" id="logoutButton">
+        <a href="/liste"><img class="logout" src="../images/pen.png" alt="pen"/></a>
       </button>
       <% } %>
     </header>
@@ -101,8 +72,7 @@
       </h1>
 
       <p>
-        L'édition et la direction de la publication du présent site internet est
-        assurée par :<br />
+        L'édition et la direction de la publication du présent site internet est assurée par :<br />
         Mme JOUEN Solène<br />
         14 000 CAEN
       </p>

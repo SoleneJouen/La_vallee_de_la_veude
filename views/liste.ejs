@@ -99,7 +99,7 @@
             const title = document.createElement("h2");
             const link = document.createElement("a");
             link.href = article.link;
-            link.textContent = article.title;
+            link.textContent = article.titre;
             title.appendChild(link);
 
             const description = document.createElement("p");
@@ -110,17 +110,19 @@
             author.classList.add("auteur");
             author.textContent = article.author;
 
-            const editButton = document.createElement("button");
-            editButton.type = "button";
-            editButton.classList.add("btn", "btn3");
-            const editLink = document.createElement("a");
-            editLink.href = "#";
-            const editImage = document.createElement("img");
-            editImage.classList.add("pen");
-            editImage.src = "../images/pen.png";
-            editImage.alt = "Modifier";
-            editLink.appendChild(editImage);
-            editButton.appendChild(editLink);
+            //Bouton modifier
+
+            // const editButton = document.createElement("button");
+            // editButton.type = "button";
+            // editButton.classList.add("btn", "btn3");
+            // const editLink = document.createElement("a");
+            // editLink.href = "#";
+            // const editImage = document.createElement("img");
+            // editImage.classList.add("pen");
+            // editImage.src = "../images/pen.png";
+            // editImage.alt = "Modifier";
+            // editLink.appendChild(editImage);
+            // editButton.appendChild(editLink);
 
             const deleteButton = document.createElement("button");
             deleteButton.type = "button";
@@ -152,7 +154,7 @@
             rightDiv.appendChild(title);
             rightDiv.appendChild(description);
             rightDiv.appendChild(author);
-            rightDiv.appendChild(editButton);
+            // rightDiv.appendChild(editButton);
             rightDiv.appendChild(deleteButton);
 
             articleDiv.appendChild(rightDiv);

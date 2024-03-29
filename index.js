@@ -28,10 +28,10 @@ const {
   MAILER_SEND_TO,
   HTTP_PORT,
   HTTP_ADDRESS,
+  SECRET_CAPTCHA,
 } = process.env;
 
-// configuration des middlewares
-
+// Configuration des middlewares
 app.use(cookieParser());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: false }));
@@ -40,6 +40,20 @@ app.use(express.json());
 
 // Route pour la gestion du formulaire de contact (POST)
 app.post("/envoyer-email", (req, res) => {
+  if(
+    req.body.captcha === undefined ||
+    req.body.captcha === '' ||
+    req.body.captcha === null
+  ){
+    return res.json({"success": false, "msg":"Please select captcha"});
+  }
+
+  //Secret Key
+  const secretKey = SECRET_CAPTCHA;
+
+  //Verify URL
+  const verifyUrl = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
+
   const { name, email, message } = req.body;
 
   // Configuration du transporteur SMTP pour l'envoi d'e-mails via Gmail
@@ -60,18 +74,26 @@ app.post("/envoyer-email", (req, res) => {
     replyTo: email, // Adresse e-mail de l'émetteur (peut être ajoutée dans le champ "Reply-To")
   };
 
-  // Envoi de l'e-mail
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log("Erreur lors de l'envoi de l'e-mail:", error);
-      res
-        .status(500)
-        .send("Une erreur est survenue lors de l'envoi de l'e-mail.");
+  //Make Request To VerifyURL
+  request(verifyUrl, (err, reponse, body)=>{
+    if(err) {
+      // ici répondre une erreur (le captcha n'est pas bon !)
+      console.log("Erreur lors de la vérification du captcha");
     } else {
-      console.log("E-mail envoyé avec succès:", info.response);
-      res.status(200).send("Votre message a été envoyé avec succès.");
+      // Envoi de l'e-mail
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log("Erreur lors de l'envoi de l'e-mail:", error);
+          res
+            .status(500)
+            .send("Une erreur est survenue lors de l'envoi de l'e-mail.");
+        } else {
+          console.log("E-mail envoyé avec succès:", info.response);
+          res.status(200).send({message: "Votre message a été envoyé avec succès."});
+        }
+      });
     }
-  });
+  })
 });
 
 // Route pour la page d'accueil (GET)
@@ -107,48 +129,9 @@ app.listen(HTTP_PORT, HTTP_ADDRESS, () => {
   console.log(`Serveur démarré sur le port ${HTTP_ADDRESS}:${HTTP_PORT}`);
 });
 
-
-
-
-
-
-
-
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.get('/', (req, res)=>{
     res.sendFile(__dirname + '/index.html');
 });
-
-app.post('/subscribe', (req, res) =>{
-    if(
-        req.body.captcha === undefined ||
-        req.body.captcha === '' ||
-        req.body.captcha === null
-    ){
-        return res.json({"success": false, "msg":"Please select captcha"});
-    }
-
-    //Secret Key
-    const secretKey = '6LdvFJIpAAAAAFxnKNu6lM0iG8wmOT6mI4qCooN7';
-
-    //Verify URL
-    const verifyUrl = `https://google.com/recaptcha/api/siteverify?secret=${secretKey}&response=${req.body.captcha}&remoteip=${req.connection.remoteAddress}`;
-
-    //Make Request To VerifyURL
-    request(verifyUrl, (err, reponse, body)=>{
-        body = JSON.parse(body);
-        console.log(body);
-
-        //If not Succesful
-        if(body.success !== undefined && !body.success){
-            return res.json({"success": false, "msg":"Failed captcha verification"});
-        }
-
-        //If Successful
-        return res.json({"success": true, "msg":"Captcha passed"});
-
-    })
-})
