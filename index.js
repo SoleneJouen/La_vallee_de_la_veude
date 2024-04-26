@@ -19,6 +19,9 @@ import liste from "./routes/liste.js";
 import bodyParser from "body-parser";
 import request from "request";
 
+import http from "http";
+// const http = require("http");
+
 const app = express();
 
 // Cache d'information importante
@@ -26,8 +29,8 @@ const {
   MAILER_USER,
   MAILER_PASSWORD,
   MAILER_SEND_TO,
-  HTTP_PORT,
-  HTTP_ADDRESS,
+  // HTTP_PORT,
+  // HTTP_ADDRESS,
   SECRET_CAPTCHA,
 } = process.env;
 
@@ -45,7 +48,7 @@ app.post("/envoyer-email", (req, res) => {
     req.body.captcha === '' ||
     req.body.captcha === null
   ){
-    return res.json({"success": false, "msg":"Please select captcha"});
+    return res.status(400).json({ success: false, msg: "Captcha non sélectionné, veuillez prouver que vous n'êtes pas un robot" });
   }
 
   //Secret Key
@@ -78,7 +81,8 @@ app.post("/envoyer-email", (req, res) => {
   request(verifyUrl, (err, reponse, body)=>{
     if(err) {
       // ici répondre une erreur (le captcha n'est pas bon !)
-      console.log("Erreur lors de la vérification du captcha");
+      console.log("Erreur lors de la vérification du captcha")
+      res.status(400).json({ success: false, msg: 'Erreur de vérification du re-captcha' })
     } else {
       // Envoi de l'e-mail
       transporter.sendMail(mailOptions, (error, info) => {
@@ -86,10 +90,10 @@ app.post("/envoyer-email", (req, res) => {
           console.log("Erreur lors de l'envoi de l'e-mail:", error);
           res
             .status(500)
-            .send("Une erreur est survenue lors de l'envoi de l'e-mail.");
+            .json({ success: false, msg: "Une erreur est survenue lors de l'envoi de l'e-mail." });
         } else {
           console.log("E-mail envoyé avec succès:", info.response);
-          res.status(200).send({message: "Votre message a été envoyé avec succès."});
+          res.status(200).send({ success: true, msg: "Votre message a été envoyé avec succès." });
         }
       });
     }
@@ -124,14 +128,18 @@ app.use("/logout", logout);
 // Route pour la page de la liste des articles (GET)
 app.use("/liste", liste);
 
-// Démarrage du serveur
-app.listen(HTTP_PORT, HTTP_ADDRESS, () => {
-  console.log(`Serveur démarré sur le port ${HTTP_ADDRESS}:${HTTP_PORT}`);
-});
-
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 app.get('/', (req, res)=>{
     res.sendFile(__dirname + '/index.html');
 });
+
+// Démarrage du serveur
+const server = http.createServer(app)
+
+server.listen()
+
+// app.listen(HTTP_PORT, HTTP_ADDRESS, () => {
+//   console.log(`Serveur démarré sur le port ${HTTP_ADDRESS}:${HTTP_PORT}`);
+// });

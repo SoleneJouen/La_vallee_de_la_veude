@@ -48,7 +48,24 @@ p{
     color: #94d636;
 }
 
-table, th, td{
+li{
+    color: #94d636;
+    list-style: none;
+}
+
+.smiley{
+    width: 1.5%;
+}
+
+.strong{
+    font-weight: bold;
+}
+
+.tarifs{
+    color: #fb3b77;
+}
+
+/* table, th, td{
     width: 75%;
     color: #94d636;
     border: 1px #ffffff solid;
@@ -59,7 +76,7 @@ table, th, td{
 
 .center{
     text-align: center;
-}
+} */
 
 h1,
 h2{

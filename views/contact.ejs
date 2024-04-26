@@ -45,7 +45,7 @@
     </header>
     <main>
       <!-- Logo -->
-      <img class="logo" src="../images/logo.png" alt="Logo" />
+      <img class="logo" src="../images/logo.png" alt="Logo"/>
 
       <!-- Siret -->
       <p class="siret">SIRET 51525284900028</p>
@@ -91,7 +91,7 @@
         <textarea id="message" name="message" required></textarea><br />
 
         <div class="g-recaptcha recaptcha captcha" data-sitekey="6LdvFJIpAAAAAM-Ne9S0Ww8YemudNphsPF1SHPIY" data-action="LOGIN"></div><br />
-        <input type="submit" value="ENVOYER" />
+        <input id="btn-submit" type="submit" value="ENVOYER" />
       </form>
       <div id="response"></div>
     </main>
@@ -105,11 +105,22 @@
 
       function submitForm(e){
           e.preventDefault();
+
+          const btn = document.querySelector('#btn-submit')
           
           const name = document.querySelector('#name').value;
           const email = document.querySelector('#email').value;
           const message = document.querySelector('#message').value;
           const captcha = document.querySelector('#g-recaptcha-response').value;
+
+          const response = document.querySelector('#response');
+
+          response.innerHTML = 'Envoi en cours...';
+          response.classList.remove('success')
+          response.classList.remove('error')
+          response.classList.add('loading')
+
+          btn.disabled = true
 
           fetch('/envoyer-email', {
               method: 'POST',
@@ -121,9 +132,17 @@
           })
           .then((res) => res.json())
           .then((data) => {
-              console.log(data);
-              //location.reload();  
-              window.location.reload();
+              response.classList.remove('loading')
+              if(data.success) {
+                response.classList.add('success')
+              } else {
+                response.classList.add('error')
+              }
+
+              response.innerHTML = data.msg
+
+              btn.disabled = false
+
               return data.msg;
           });
       }
